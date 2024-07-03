@@ -1,0 +1,61 @@
+Hi everyone, in order to prepare the next session, I need to you prepare your local environments.
+To set up your local environment for React development, you'll need Node.js, npm, and the Create React App command line tool. Here's a step-by-step guide:
+
+1.	Install Node.js and npm: Node.js is a JavaScript runtime that allows you to run JavaScript on your server or your machine. npm is a package manager for Node.js. You can download Node.js and npm from the official Node.js website. After installation, you can verify the installation by checking the versions of Node.js and npm in your terminal:
+
+node -v
+npm -v
+
+2.	Install Create React App: Create React App is a command line tool that helps you create new React.js applications. You can install it globally on your machine using npm:
+
+npm install -g create-react-app
+
+3.	Create the Monorepo Structure: Create a new directory for your monorepo and initialize it as a Git repository.
+
+mkdir react-photoalbum && cd react-photoalbum
+git init
+
+4.	Create the Frontend Application: Use Create React App to create a new React application in a subdirectory.
+
+npx create-react-app frontend
+
+5.	Create the Backend Application: You can use Spring Initializr to create a new Spring Boot application (a popular framework for Java backend development). Download the project and extract it to a new “backend” directory in your monorepo.
+
+6.	Dockerize the Applications: Create a Dockerfile in each of the frontend and backend directories.
+
+For the frontend, your Dockerfile might look like this:
+
+# frontend/Dockerfile
+FROM node:14
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+FROM nginx:stable-alpine
+COPY --from=0 /app/build /usr/share/nginx/html
+
+For the backend, your Dockerfile might look like this:
+
+# backend/Dockerfile
+FROM openjdk:8-jdk-alpine
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+
+7.	Create a Docker Compose File: In the root of your monorepo, create a docker-compose.yml file to orchestrate your services.
+
+version: '3'
+services:
+  frontend:
+    build: frontend
+    ports:
+      - 3000:80
+  backend:
+    build: backend
+    ports:
+      - 8080:8080
+
+8.	Build and Run Your Applications: Use Docker Compose to build and run your applications.
+
+docker-compose up –build
