@@ -1,29 +1,44 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import './Nav.css';
 
 const menuItems = [
   {
+    id: 1,
     name: 'albums',
     position: null,
   },
   {
+    id: 2,
     name: 'photos',
     position: null,
   },
   {
+    id: 3,
     name: 'login',
     position: 'right',
   }
 ];
 
 class Nav extends React.Component {
-  renderMenuItems = (item) => {
 
+  renderMenuItems = (selectedItem) => {
+    this.setState({
+      actualPage: selectedItem
+    });
   }
 
   render() {
     return (
-      <div>Nav Bar | Albums | Photos | Login</div>
+      <navbar>
+        <li>
+          {menuItems.map(item => (
+            <ul key={item.name}
+              onClick={() => this.renderMenuItems(item.id)}>
+              {item.name}
+            </ul>
+          ))}
+        </li>
+      </navbar>
     );
   }
 }

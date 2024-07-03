@@ -4,12 +4,19 @@ import './StatusBar.css';
 
 const StatusBar = (props) => {
   return (
-    <div>Status Bar</div>
+    <div>
+      <h3>{props.title}</h3>
+      <button
+        onClick={props.newObjectFunction}>
+        +
+      </button>
+    </div>
   );
 }
 
 StatusBar.propTypes = {
   title: PropTypes.string.isRequired,
+  newObjectFunction: PropTypes.any.isRequired
 }
 
 export default StatusBar;
