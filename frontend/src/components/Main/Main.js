@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Route, Routes } from 'react-router';
 import { AlbumList } from '../Album';
 import { PhotoList } from '../Photo';
 import Login from '../Login';
-//import * as api from '../../api';
+import { Routes, Route } from 'react-router-dom';
 
 class Main extends Component {
   state = {
@@ -12,31 +11,11 @@ class Main extends Component {
   }
 
   componentWillMount() {
-    // If there is no data in local storage, get data from api
-    const localAlbums = localStorage.getItem('albums');
-    const localPhotos = localStorage.getItem('photos');
 
-    if (localAlbums && localPhotos) {
-      this.setState({
-        albums: JSON.parse(localAlbums),
-        photos: JSON.parse(localPhotos)
-      });
-    } else {
-      this.setState({
-        //albums: api.getAlbums(),
-        //photos: api.getPhotos(),
-      });
-    }
   }
 
   componentWillUpdate(nextProps, nextState) {
-    localStorage.setItem(
-      'albums', JSON.stringify(nextState.albums)
-    );
 
-    localStorage.setItem(
-      'photos', JSON.stringify(nextState.photos)
-    );
   }
 
   createAlbum = (album) => {
@@ -116,7 +95,7 @@ class Main extends Component {
 
     return (
       <Routes>
-        <Route exact path="/" component={Login} />
+        <Route exact path="/" component={albumList} />
         <Route path="/albums" render={albumList} />
         <Route path="/photos" render={photoList} />
         <Route path="/login" render={Login} />
