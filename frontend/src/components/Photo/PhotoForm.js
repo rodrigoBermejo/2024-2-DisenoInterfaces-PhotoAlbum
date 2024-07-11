@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Box } from '@mui/material';
 
 class PhotoForm extends React.Component {
   state = {
@@ -12,7 +13,8 @@ class PhotoForm extends React.Component {
     }
   }
 
-  handleInputChange = (name, value) => {
+  handleInputChange = (event) => {
+    const { name, value } = event.target;
     const { photo } = this.state;
     const updatedPhoto = {
       ...photo,
@@ -36,6 +38,7 @@ class PhotoForm extends React.Component {
   }
 
   handleSubmit = (event) => {
+    event.preventDefault();
     if (!this.isFormValid()) {
       this.setState({ error: true });
       return;
@@ -68,8 +71,60 @@ class PhotoForm extends React.Component {
 
   render() {
     const { modalOpen, photo, error } = this.state;
+    const { formType } = this.props;
+
     return (
-      <div>Photo Form</div>
+      <Dialog open={modalOpen} onClose={this.closeForm}>
+        <DialogTitle>{formType === 'New' ? 'Add New Photo' : 'Edit Photo'}</DialogTitle>
+        <DialogContent>
+          <Box component="form" onSubmit={this.handleSubmit} noValidate>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="title"
+              label="Title"
+              name="title"
+              value={photo.title}
+              onChange={this.handleInputChange}
+              error={error && !photo.title}
+              helperText={error && !photo.title ? 'Title is required' : ''}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="description"
+              label="Description"
+              name="description"
+              value={photo.description}
+              onChange={this.handleInputChange}
+              error={error && !photo.description}
+              helperText={error && !photo.description ? 'Description is required' : ''}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="url"
+              label="URL"
+              name="url"
+              value={photo.url}
+              onChange={this.handleInputChange}
+              error={error && !photo.url}
+              helperText={error && !photo.url ? 'URL is required' : ''}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.closeForm} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={this.handleSubmit} color="primary">
+            {formType === 'New' ? 'Add' : 'Save'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 
@@ -78,6 +133,11 @@ class PhotoForm extends React.Component {
     index: PropTypes.string,
     editPhoto: PropTypes.func,
     createPhoto: PropTypes.func,
+    photo: PropTypes.shape({
+      title: PropTypes.string,
+      description: PropTypes.string,
+      url: PropTypes.string,
+    }),
   }
 }
 

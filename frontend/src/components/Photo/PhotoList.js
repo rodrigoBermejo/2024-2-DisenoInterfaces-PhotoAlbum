@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Photo, { PhotoForm } from '../Photo';
+import { Photo, PhotoForm } from '../Photo';
 import StatusBar from '../StatusBar';
 import { DeleteButton } from '../Common';
+import { Box, Typography, Button, Grid } from '@mui/material';
 
 const PhotoList = (props) => {
   const { photos, deletePhoto, editPhoto, createPhoto } = props;
@@ -14,38 +15,42 @@ const PhotoList = (props) => {
           const photo = photos[key];
 
           return (
-            <Photo
-              key={key}
-              photo={photo}
-              deletePhoto={deletePhoto}
-              editPhoto={editPhoto}
-            >
-              <PhotoForm
-                formType='Edit'
+            <Grid item xs={12} sm={6} md={4} key={key}>
+              <Photo
                 photo={photo}
-                index={key}
+                deletePhoto={deletePhoto}
                 editPhoto={editPhoto}
-              />
-              <DeleteButton
-                index={key}
-                objectName={photo.title}
-                deleteObject={deletePhoto}
-              />
-            </Photo>
+              >
+                <PhotoForm
+                  formType='Edit'
+                  photo={photo}
+                  index={key}
+                  editPhoto={editPhoto}
+                />
+                <DeleteButton
+                  index={key}
+                  objectName={photo.title}
+                  deleteObject={deletePhoto}
+                />
+              </Photo>
+            </Grid>
           );
         })
     );
   };
 
   return (
-    <div>
+    <Box>
       <StatusBar title={`${Object.keys(photos).length} Photo(s) total`}>
         <PhotoForm
           formType='New'
           createPhoto={createPhoto}
         />
       </StatusBar>
-    </div>
+      <Grid container spacing={2}>
+        {renderPhoto()}
+      </Grid>
+    </Box>
   );
 }
 
