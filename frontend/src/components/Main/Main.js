@@ -102,7 +102,26 @@ class Main extends Component {
           editPhoto={this.editPhoto}
           createPhoto={this.createPhoto}
         />
-
+        <Photo photo={photos[0]}></Photo>
+        <PhotoForm
+          formType='Add'
+          photo={{}}
+          index={null}
+          editPhoto={this.editPhoto}
+        />
+        <PhotoList
+          photos={photos}
+          deletePhoto={this.deletePhoto}
+          editPhoto={this.editPhoto}
+          createPhoto={this.createPhoto}
+        />
+        <AlbumList
+          albums={albums}
+          photos={photos}
+          deleteAlbum={this.deleteAlbum}
+          editAlbum={this.editAlbum}
+          createAlbum={this.createAlbum}
+        />
       </>
     );
   }
