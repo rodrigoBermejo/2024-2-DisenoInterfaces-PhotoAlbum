@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 
 class DeleteButton extends React.Component {
   state = {
@@ -14,6 +16,9 @@ class DeleteButton extends React.Component {
 
   onOkConfirm = () => {
     this.props.deleteObject(this.props.index);
+    this.setState({
+      deleteConfirmOpen: false
+    });
   }
 
   onCancelConfirm = () => {
@@ -26,13 +31,37 @@ class DeleteButton extends React.Component {
     const { objectName } = this.props;
     const { deleteConfirmOpen } = this.state;
 
-
     return (
-      <button icon onClick={() => this.openConfirm()}>
-        <button name='trash'></button>
-      </button>
+      <>
+        <Button
+          variant="contained"
+          color="secondary"
+          startIcon={<DeleteIcon />}
+          onClick={this.openConfirm}
+        >
+          Delete
+        </Button>
+        <Dialog
+          open={deleteConfirmOpen}
+          onClose={this.onCancelConfirm}
+        >
+          <DialogTitle>Confirm Delete</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete {objectName}?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.onCancelConfirm} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.onOkConfirm} color="secondary">
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </>
     );
-
   }
 
   static propTypes = {
