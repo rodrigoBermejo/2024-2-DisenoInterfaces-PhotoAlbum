@@ -5,6 +5,7 @@ import upa.edu.photo_album.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -25,11 +26,13 @@ public class UserController {
 
     @PostMapping
     public User createUser(@RequestBody User user) {
+        user.setCreatedAt(Instant.now());
         return userService.createUser(user);
     }
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        userDetails.setUpdatedAt(Instant.now());
         return userService.updateUser(id, userDetails);
     }
 
