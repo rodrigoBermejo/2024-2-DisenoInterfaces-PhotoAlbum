@@ -1,3 +1,4 @@
+// UserService.java
 package upa.edu.photo_album.service;
 
 import upa.edu.photo_album.model.User;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Service
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -40,5 +42,9 @@ public class UserService {
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }
