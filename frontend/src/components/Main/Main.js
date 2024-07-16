@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { AlbumList } from '../Album';
-import { Photo, PhotoForm, PhotoList } from '../Photo';
+import { PhotoList } from '../Photo';
 import { Login, Logout } from '../Login';
-// GET EXAMPLE PHOTOS AND ALBUMS
 import * as api from '../../api';
 
 class Main extends Component {
@@ -16,8 +15,8 @@ class Main extends Component {
   }
 
   fetchData = async () => {
-    const albums = await api.getAlbums();
-    const photos = await api.getPhotos();
+    const albums = await api.sampleAlbums;
+    const photos = await api.samplePhotos;
     this.setState({ albums, photos });
   }
 

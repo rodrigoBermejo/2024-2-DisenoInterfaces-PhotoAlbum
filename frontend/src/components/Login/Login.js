@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Alert } from '@mui/material';
+import { userApiService } from '../../api';
 
 const Login = (props) => {
   const [invalidLogin, setInvalidLogin] = useState(false);
@@ -15,35 +16,20 @@ const Login = (props) => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    debugger;
     if (!validateEmail(username)) {
       setInvalidLogin(true);
       setErrorMessage('Invalid email format');
       return;
     }
 
-    const response = await fetch('http://localhost:8080/api/users/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ "email": username, "passwordHash": password }),
-    });
-
     try {
-      const data = await response.json();
-      if (response.ok) {
-        setInvalidLogin(false);
-        localStorage.setItem('loggedIn', true);
-        localStorage.setItem('token', data.token);
-      } else {
-        setInvalidLogin(true);
-        setErrorMessage('Invalid username or password');
-        localStorage.setItem('loggedIn', false);
-      }
+      const data = await userApiService.login({ email: username, passwordHash: password });
+      setInvalidLogin(false);
+      localStorage.setItem('loggedIn', true);
+      localStorage.setItem('token', data.token);
     } catch (error) {
       setInvalidLogin(true);
-      setErrorMessage('An error occurred during login');
+      setErrorMessage(error.message);
       localStorage.setItem('loggedIn', false);
     }
   };

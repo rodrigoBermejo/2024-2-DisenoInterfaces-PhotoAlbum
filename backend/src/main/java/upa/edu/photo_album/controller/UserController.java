@@ -10,7 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -38,12 +40,14 @@ public class UserController {
     @PostMapping
     public User createUser(@RequestBody User user) {
         user.setCreatedAt(Instant.now());
+        user.setPasswordHash(bCryptPasswordEncoder.encode(user.getPasswordHash()));
         return userService.createUser(user);
     }
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         userDetails.setUpdatedAt(Instant.now());
+        userDetails.setPasswordHash(bCryptPasswordEncoder.encode(userDetails.getPasswordHash()));
         return userService.updateUser(id, userDetails);
     }
 
@@ -55,13 +59,13 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginRequest) {
         User user = userService.findByEmail(loginRequest.getEmail());
-        //if (user == null || !bCryptPasswordEncoder.matches(loginRequest.getPasswordHash(), user.getPasswordHash())) {
-        if (user == null) {
+        if (user == null || !bCryptPasswordEncoder.matches(loginRequest.getPasswordHash(), user.getPasswordHash())) {
             return ResponseEntity.status(401).body("Invalid email or password");
         }
 
-        //String token = jwtUtil.generateToken(user);
-        //return ResponseEntity.ok().body(token);
-        return ResponseEntity.ok().body(user);
+        String token = jwtUtil.generateToken(user);
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+        return ResponseEntity.ok().body(response);
     }
 }
