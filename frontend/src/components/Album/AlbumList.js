@@ -56,8 +56,8 @@ const AlbumList = (props) => {
   }
 
   return (
-    <div>
-      <StatusBar title={`${Object.keys(albums).length} Album(s) total`}>
+    <>
+      <StatusBar title={`${Object.keys(albums).length} Album(s) total`} newObjectFunction={props.createAlbum}>
         <AlbumForm
           formType='New'
           photos={photos}
@@ -67,7 +67,7 @@ const AlbumList = (props) => {
       <div>
         {renderAlbums()}
       </div>
-    </div>
+    </>
   );
 }
 

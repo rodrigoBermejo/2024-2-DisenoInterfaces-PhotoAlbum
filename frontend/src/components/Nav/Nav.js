@@ -40,7 +40,7 @@ const Nav = () => {
           >
             Photos
           </Typography>
-          <Tooltip title="Account settings">
+          <Tooltip title="Account settings" edge="end">
             <IconButton
               onClick={handleClickAvatar}
               size="small"

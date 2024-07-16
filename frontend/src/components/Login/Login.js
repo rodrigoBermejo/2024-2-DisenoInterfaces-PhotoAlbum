@@ -1,26 +1,50 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography } from '@mui/material';
+import { TextField, Button, Container, Typography, Alert } from '@mui/material';
 
 const Login = (props) => {
+  const [invalidLogin, setInvalidLogin] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const validateEmail = (email) => {
+    return emailRegex.test(email);
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    const response = await fetch('http://localhost:5000/login', {
+    debugger;
+    if (!validateEmail(username)) {
+      setInvalidLogin(true);
+      setErrorMessage('Invalid email format');
+      return;
+    }
+
+    const response = await fetch('http://localhost:8080/api/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ "email": username, "passwordHash": password }),
     });
-    const data = await response.json();
-    if (data.success) {
-      // Handle successful login
-      console.log('Login successful');
-    } else {
-      // Handle login failure
-      console.log('Login failed');
+
+    try {
+      const data = await response.json();
+      if (response.ok) {
+        setInvalidLogin(false);
+        localStorage.setItem('loggedIn', true);
+        localStorage.setItem('token', data.token);
+      } else {
+        setInvalidLogin(true);
+        setErrorMessage('Invalid username or password');
+        localStorage.setItem('loggedIn', false);
+      }
+    } catch (error) {
+      setInvalidLogin(true);
+      setErrorMessage('An error occurred during login');
+      localStorage.setItem('loggedIn', false);
     }
   };
 
@@ -51,6 +75,11 @@ const Login = (props) => {
           Login
         </Button>
       </form>
+      {invalidLogin && (
+        <Alert id='alertError' severity="error">
+          {errorMessage}
+        </Alert>
+      )}
     </Container>
   );
 };

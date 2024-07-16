@@ -11,32 +11,14 @@ class Main extends Component {
     photos: {}
   }
 
-  componentWillMount() {
-    // If there is no data in local storage, get data from api
-    const localAlbums = localStorage.getItem('albums');
-    const localPhotos = localStorage.getItem('photos');
-
-    if (localAlbums && localPhotos) {
-      this.setState({
-        albums: JSON.parse(localAlbums),
-        photos: JSON.parse(localPhotos)
-      });
-    } else {
-      this.setState({
-        albums: api.getAlbums(),
-        photos: api.getPhotos(),
-      });
-    }
+  componentDidMount() {
+    this.fetchData();
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    localStorage.setItem(
-      'albums', JSON.stringify(nextState.albums)
-    );
-
-    localStorage.setItem(
-      'photos', JSON.stringify(nextState.photos)
-    );
+  fetchData = async () => {
+    const albums = await api.getAlbums();
+    const photos = await api.getPhotos();
+    this.setState({ albums, photos });
   }
 
   createAlbum = (album) => {
@@ -96,19 +78,6 @@ class Main extends Component {
       <>
         <Login />
         <Logout />
-        <PhotoList
-          photos={photos}
-          deletePhoto={this.deletePhoto}
-          editPhoto={this.editPhoto}
-          createPhoto={this.createPhoto}
-        />
-        <Photo photo={photos[0]}></Photo>
-        <PhotoForm
-          formType='Add'
-          photo={{}}
-          index={null}
-          editPhoto={this.editPhoto}
-        />
         <PhotoList
           photos={photos}
           deletePhoto={this.deletePhoto}
