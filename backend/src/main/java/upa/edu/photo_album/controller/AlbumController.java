@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import upa.edu.photo_album.model.Album;
 import upa.edu.photo_album.service.AlbumService;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +23,7 @@ public class AlbumController {
 
     @PostMapping
     public ResponseEntity<Album> createAlbum(@RequestBody Album album) {
-        album.setCreatedAt(Instant.now());
+        album.setCreatedAt(LocalDateTime.now());
         Album savedAlbum = albumService.saveAlbum(album);
         return ResponseEntity.ok(savedAlbum);
     }
@@ -43,7 +43,7 @@ public class AlbumController {
     @PutMapping("/{id}")
     public ResponseEntity<Album> updateAlbum(@PathVariable Long id, @RequestBody Album album) {
         album.setId(id);
-        album.setUpdatedAt(Instant.now());
+        album.setUpdatedAt(LocalDateTime.now());
         Album updatedAlbum = albumService.updateAlbum(album);
         return ResponseEntity.ok(updatedAlbum);
     }
