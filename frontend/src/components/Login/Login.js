@@ -1,26 +1,40 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography } from '@mui/material';
+import { TextField, Button, Container, Typography, Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { userApiService } from '../../api';
 
 const Login = (props) => {
+  const [invalidLogin, setInvalidLogin] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const navigate = useNavigate();
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const validateEmail = (email) => {
+    return emailRegex.test(email);
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    const response = await fetch('http://localhost:5000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await response.json();
-    if (data.success) {
-      // Handle successful login
-      console.log('Login successful');
-    } else {
-      // Handle login failure
-      console.log('Login failed');
+    if (!validateEmail(username)) {
+      setInvalidLogin(true);
+      setErrorMessage('Invalid email format');
+      return;
+    }
+
+    try {
+      const data = await userApiService.login({ email: username, passwordHash: password });
+      setInvalidLogin(false);
+      localStorage.setItem('loggedIn', 'true');
+      localStorage.setItem('token', data.token);
+      navigate('/');
+    } catch (error) {
+      setInvalidLogin(true);
+      setErrorMessage(error.message);
+      localStorage.setItem('loggedIn', 'false');
     }
   };
 
@@ -51,6 +65,11 @@ const Login = (props) => {
           Login
         </Button>
       </form>
+      {invalidLogin && (
+        <Alert id='alertError' severity="error">
+          {errorMessage}
+        </Alert>
+      )}
     </Container>
   );
 };

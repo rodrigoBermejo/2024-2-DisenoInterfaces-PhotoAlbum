@@ -41,7 +41,7 @@ const PhotoList = (props) => {
 
   return (
     <Box>
-      <StatusBar title={`${Object.keys(photos).length} Photo(s) total`}>
+      <StatusBar title={`${Object.keys(photos).length} Photo(s) total`} newObjectFunction={props.createPhoto}>
         <PhotoForm
           formType='New'
           createPhoto={createPhoto}

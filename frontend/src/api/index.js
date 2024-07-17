@@ -1,10 +1,5 @@
 import { default as sampleAlbums } from './sampleAlbums';
 import { default as samplePhotos } from './samplePhotos';
+import { default as userApiService } from './userApiService';
 
-export function getAlbums() {
-  return sampleAlbums;
-}
-
-export function getPhotos() {
-  return samplePhotos;
-}
+export { sampleAlbums, samplePhotos, userApiService };

@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Typography, Button } from '@mui/material';
 
 const Logout = () => {
+  useEffect(() => {
+    localStorage.removeItem('loggedIn');
+    localStorage.removeItem('token');
+  }, []);
+
   const handleLoginRedirect = () => {
     window.location.href = '/login';
   };

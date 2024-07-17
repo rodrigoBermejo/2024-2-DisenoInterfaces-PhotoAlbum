@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import { AlbumList } from '../Album';
-import { Photo, PhotoForm, PhotoList } from '../Photo';
+import { PhotoList } from '../Photo';
 import { Login, Logout } from '../Login';
-// GET EXAMPLE PHOTOS AND ALBUMS
 import * as api from '../../api';
 
 class Main extends Component {
@@ -11,32 +11,18 @@ class Main extends Component {
     photos: {}
   }
 
-  componentWillMount() {
-    // If there is no data in local storage, get data from api
-    const localAlbums = localStorage.getItem('albums');
-    const localPhotos = localStorage.getItem('photos');
-
-    if (localAlbums && localPhotos) {
-      this.setState({
-        albums: JSON.parse(localAlbums),
-        photos: JSON.parse(localPhotos)
-      });
+  componentDidMount() {
+    if (!this.state.isLoggedIn) {
+      //window.location.href = '/login';
     } else {
-      this.setState({
-        albums: api.getAlbums(),
-        photos: api.getPhotos(),
-      });
+      this.fetchData();
     }
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    localStorage.setItem(
-      'albums', JSON.stringify(nextState.albums)
-    );
-
-    localStorage.setItem(
-      'photos', JSON.stringify(nextState.photos)
-    );
+  fetchData = async () => {
+    const albums = await api.sampleAlbums;
+    const photos = await api.samplePhotos;
+    this.setState({ albums, photos });
   }
 
   createAlbum = (album) => {
@@ -91,38 +77,26 @@ class Main extends Component {
 
   render() {
     const { albums, photos } = this.state;
+    const albumListComponent = <AlbumList
+      albums={albums}
+      photos={photos}
+      deleteAlbum={this.deleteAlbum}
+      editAlbum={this.editAlbum}
+      createAlbum={this.createAlbum} />;
+    const photoListComponent = <PhotoList
+      photos={photos}
+      deletePhoto={this.deletePhoto}
+      editPhoto={this.editPhoto}
+      createPhoto={this.createPhoto} />;
 
     return (
-      <>
-        <Login />
-        <Logout />
-        <PhotoList
-          photos={photos}
-          deletePhoto={this.deletePhoto}
-          editPhoto={this.editPhoto}
-          createPhoto={this.createPhoto}
-        />
-        <Photo photo={photos[0]}></Photo>
-        <PhotoForm
-          formType='Add'
-          photo={{}}
-          index={null}
-          editPhoto={this.editPhoto}
-        />
-        <PhotoList
-          photos={photos}
-          deletePhoto={this.deletePhoto}
-          editPhoto={this.editPhoto}
-          createPhoto={this.createPhoto}
-        />
-        <AlbumList
-          albums={albums}
-          photos={photos}
-          deleteAlbum={this.deleteAlbum}
-          editAlbum={this.editAlbum}
-          createAlbum={this.createAlbum}
-        />
-      </>
+      <Routes>
+        <Route path="/" element={albumListComponent} />
+        <Route path="/photos" element={photoListComponent} />
+        <Route path="/albums" element={albumListComponent} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
+      </Routes>
     );
   }
 }
