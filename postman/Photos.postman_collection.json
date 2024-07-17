@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "a0b688d9-e32f-4ea7-8522-6faabb432a43",
+		"name": "Photos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2742061"
+	},
+	"item": [
+		{
+			"name": "getAllPhotos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}photos",
+					"host": [
+						"{{url}}photos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPhotosById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}photos/1",
+					"host": [
+						"{{url}}photos"
+					],
+					"path": [
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createPhotos",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Fright Night Part II\",\n    \"description\": \"Nunc rhoncus dui vel sem.\",\n    \"url\": \"https://source.unsplash.com/1600x900/?happy\",\n    \"createdAt\": \"2024-06-17T17:48:30\",\n    \"updatedAt\": \"2024-06-17T17:48:30\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}photos",
+					"host": [
+						"{{url}}photos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updatePhotos",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Fright Night Part III\",\n    \"description\": \"Nunc rhoncus dui vel sem.\",\n    \"url\": \"https://source.unsplash.com/1600x900/?happy\",\n    \"createdAt\": \"2024-07-17T16:32:25.106628\",\n    \"updatedAt\": \"2024-06-17T17:48:30\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}photos/21",
+					"host": [
+						"{{url}}photos"
+					],
+					"path": [
+						"21"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deletePhotos",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}photos/21",
+					"host": [
+						"{{url}}photos"
+					],
+					"path": [
+						"21"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
