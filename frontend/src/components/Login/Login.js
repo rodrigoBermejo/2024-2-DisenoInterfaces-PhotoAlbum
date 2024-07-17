@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { userApiService } from '../../api';
 
 const Login = (props) => {
@@ -7,6 +8,8 @@ const Login = (props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const navigate = useNavigate();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -25,12 +28,13 @@ const Login = (props) => {
     try {
       const data = await userApiService.login({ email: username, passwordHash: password });
       setInvalidLogin(false);
-      localStorage.setItem('loggedIn', true);
+      localStorage.setItem('loggedIn', 'true');
       localStorage.setItem('token', data.token);
+      navigate('/');
     } catch (error) {
       setInvalidLogin(true);
       setErrorMessage(error.message);
-      localStorage.setItem('loggedIn', false);
+      localStorage.setItem('loggedIn', 'false');
     }
   };
 
