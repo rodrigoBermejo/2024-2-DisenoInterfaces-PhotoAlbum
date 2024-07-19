@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { userApiService } from '../../api';
+import userApiService from '../../api/userApiService';
 
 const Login = (props) => {
   const [invalidLogin, setInvalidLogin] = useState(false);

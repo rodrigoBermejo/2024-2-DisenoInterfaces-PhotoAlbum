@@ -17,10 +17,12 @@ const login = async (loginRequest) => {
 };
 
 const getProfile = async () => {
+  const token = localStorage.getItem('token');
   const response = await fetch(`${API_URL}/users`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     },
   });
   const data = await response.json();
@@ -30,7 +32,9 @@ const getProfile = async () => {
   return data;
 };
 
-export default {
+const userApiService = {
   login,
   getProfile,
 };
+
+export default userApiService;
