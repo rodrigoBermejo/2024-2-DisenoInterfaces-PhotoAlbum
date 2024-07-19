@@ -6,6 +6,7 @@ import upa.edu.photo_album.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -34,7 +35,7 @@ public class UserService {
             user.setPasswordHash(userDetails.getPasswordHash());
             user.setFirstName(userDetails.getFirstName());
             user.setLastName(userDetails.getLastName());
-            user.setUpdatedAt(userDetails.getUpdatedAt());
+            user.setUpdatedAt(LocalDateTime.now());
             return userRepository.save(user);
         }
         return null;

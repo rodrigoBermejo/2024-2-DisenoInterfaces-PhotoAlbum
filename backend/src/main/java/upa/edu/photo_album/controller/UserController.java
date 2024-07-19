@@ -1,4 +1,3 @@
-// UserController.java
 package upa.edu.photo_album.controller;
 
 import upa.edu.photo_album.model.User;
@@ -9,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,14 +38,14 @@ public class UserController {
 
     @PostMapping
     public User createUser(@RequestBody User user) {
-        user.setCreatedAt(Instant.now());
+        user.setCreatedAt(LocalDateTime.now());
         user.setPasswordHash(bCryptPasswordEncoder.encode(user.getPasswordHash()));
         return userService.createUser(user);
     }
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        userDetails.setUpdatedAt(Instant.now());
+        userDetails.setUpdatedAt(LocalDateTime.now());
         userDetails.setPasswordHash(bCryptPasswordEncoder.encode(userDetails.getPasswordHash()));
         return userService.updateUser(id, userDetails);
     }
