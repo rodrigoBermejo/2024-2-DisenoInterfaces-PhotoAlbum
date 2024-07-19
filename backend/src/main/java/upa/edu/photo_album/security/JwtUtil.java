@@ -16,7 +16,7 @@ public class JwtUtil {
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // 1 hour
-                .signWith(SignatureAlgorithm.PS512, SECRET_KEY)
+                //.signWith(SignatureAlgorithm.PS512, SECRET_KEY)
                 .compact();
     }
 }
