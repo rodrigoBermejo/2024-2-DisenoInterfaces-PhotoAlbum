@@ -41,7 +41,7 @@ Este proyecto consiste en desarrollar un foto álbum digital que integra múltip
 
   - Backend:
 ```xml
-  <dependencies>
+	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -61,22 +61,22 @@ Este proyecto consiste en desarrollar un foto álbum digital que integra múltip
 			<scope>test</scope>
 		</dependency>
 		<!-- Spring Security Crypto dependency -->
-    <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-crypto</artifactId>
-        <version>5.5.3</version>
-    </dependency>
-    <!-- JJWT dependency -->
-    <dependency>
-        <groupId>io.jsonwebtoken</groupId>
-        <artifactId>jjwt</artifactId>
-        <version>0.9.1</version>
-    </dependency>
-	<dependency>
-		<groupId>javax.xml.bind</groupId>
-		<artifactId>jaxb-api</artifactId>
-		<version>2.3.1</version>
-	</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+			<version>5.5.3</version>
+		</dependency>
+		<!-- JJWT dependency -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
 	</dependencies>
 ```
 - Frontend:
