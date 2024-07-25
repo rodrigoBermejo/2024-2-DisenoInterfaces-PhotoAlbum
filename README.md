@@ -135,10 +135,10 @@ Una vez configurado, puedes acceder a la aplicación de la siguiente manera:
 Este proyecto está licenciado bajo la MIT License.
 
 # Autores y Reconocimientos
-Autor Principal: Juan Rodrigo Leaños Bermejo
-Colaboradores: Juan Carlos Herrera
+- Autor Principal: Juan Rodrigo Leaños Bermejo
+- Colaboradores: Juan Carlos Herrera
 
-Agradecimientos especiales a los siguientes individuos y organizaciones:
+### Agradecimientos especiales a los siguientes individuos y organizaciones:
 
 - Profesor: Jonathan Ezequiel Ibarra Chávez
 - Profesor: Ricardo Padilla
