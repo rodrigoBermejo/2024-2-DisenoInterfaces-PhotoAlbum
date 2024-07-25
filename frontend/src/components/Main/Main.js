@@ -1,104 +1,101 @@
-import React, { Component } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { AlbumList } from '../Album';
 import { PhotoList } from '../Photo';
 import { Login, Logout } from '../Login';
 import * as api from '../../api';
 
-class Main extends Component {
-  state = {
+const Main = () => {
+  const [state, setState] = useState({
     albums: {},
-    photos: {}
-  }
+    photos: {},
+    isLoggedIn: false
+  });
 
-  componentDidMount() {
-    if (!this.state.isLoggedIn) {
-      //window.location.href = '/login';
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!state.isLoggedIn) {
+      navigate('/login');
     } else {
-      this.fetchData();
+      fetchData();
     }
-  }
+  }, [state.isLoggedIn]);
 
-  fetchData = async () => {
+  const fetchData = async () => {
     const albums = await api.sampleAlbums;
     const photos = await api.samplePhotos;
-    this.setState({ albums, photos });
-  }
+    setState(prevState => ({ ...prevState, albums, photos }));
+  };
 
-  createAlbum = (album) => {
-    let albums = { ...this.state.albums };
+  const createAlbum = (album) => {
     const timestamp = Date.now();
-    albums[`album-${timestamp}`] = album;
-    this.setState({
-      albums
-    });
-  }
+    setState(prevState => ({
+      ...prevState,
+      albums: { ...prevState.albums, [`album-${timestamp}`]: album }
+    }));
+  };
 
-  editAlbum = (key, updatedAlbum) => {
-    let albums = { ...this.state.albums };
-    albums[key] = updatedAlbum;
-    this.setState({
-      albums
-    });
-  }
+  const editAlbum = (key, updatedAlbum) => {
+    setState(prevState => ({
+      ...prevState,
+      albums: { ...prevState.albums, [key]: updatedAlbum }
+    }));
+  };
 
-  deleteAlbum = (key) => {
-    let albums = { ...this.state.albums };
-    delete albums[key];
-    this.setState({
-      albums
-    });
-  }
+  const deleteAlbum = (key) => {
+    const { [key]: _, ...remainingAlbums } = state.albums;
+    setState(prevState => ({
+      ...prevState,
+      albums: remainingAlbums
+    }));
+  };
 
-  createPhoto = (photo) => {
-    let photos = { ...this.state.photos };
+  const createPhoto = (photo) => {
     const timestamp = Date.now();
-    photos[`photo-${timestamp}`] = photo;
-    this.setState({
-      photos
-    });
-  }
+    setState(prevState => ({
+      ...prevState,
+      photos: { ...prevState.photos, [`photo-${timestamp}`]: photo }
+    }));
+  };
 
-  editPhoto = (key, updatedPhoto) => {
-    let photos = { ...this.state.photos };
-    photos[key] = updatedPhoto;
-    this.setState({
-      photos
-    });
-  }
+  const editPhoto = (key, updatedPhoto) => {
+    setState(prevState => ({
+      ...prevState,
+      photos: { ...prevState.photos, [key]: updatedPhoto }
+    }));
+  };
 
-  deletePhoto = (key) => {
-    let photos = { ...this.state.photos };
-    delete photos[key];
-    this.setState({
-      photos
-    });
-  }
+  const deletePhoto = (key) => {
+    const { [key]: _, ...remainingPhotos } = state.photos;
+    setState(prevState => ({
+      ...prevState,
+      photos: remainingPhotos
+    }));
+  };
 
-  render() {
-    const { albums, photos } = this.state;
-    const albumListComponent = <AlbumList
-      albums={albums}
-      photos={photos}
-      deleteAlbum={this.deleteAlbum}
-      editAlbum={this.editAlbum}
-      createAlbum={this.createAlbum} />;
-    const photoListComponent = <PhotoList
-      photos={photos}
-      deletePhoto={this.deletePhoto}
-      editPhoto={this.editPhoto}
-      createPhoto={this.createPhoto} />;
+  const { albums, photos, isLoggedIn } = state;
+  const albumListComponent = <AlbumList
+    albums={albums}
+    photos={photos}
+    deleteAlbum={deleteAlbum}
+    editAlbum={editAlbum}
+    createAlbum={createAlbum} />;
+  const photoListComponent = <PhotoList
+    photos={photos}
+    deletePhoto={deletePhoto}
+    editPhoto={editPhoto}
+    createPhoto={createPhoto} />;
 
-    return (
-      <Routes>
-        <Route path="/" element={albumListComponent} />
-        <Route path="/photos" element={photoListComponent} />
-        <Route path="/albums" element={albumListComponent} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} />
-      </Routes>
-    );
-  }
-}
+  return (
+    <Routes>
+      <Route path="/" element={isLoggedIn ? albumListComponent : <Navigate to="/login" />} />
+      <Route path="/photos" element={isLoggedIn ? photoListComponent : <Navigate to="/login" />} />
+      <Route path="/albums" element={isLoggedIn ? albumListComponent : <Navigate to="/login" />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/logout" element={<Logout />} />
+    </Routes>
+  );
+};
 
 export default Main;

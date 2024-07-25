@@ -4,6 +4,14 @@ CREATE DATABASE `photo-album-db`;
 
 USE `photo-album-db`;
 
+CREATE USER IF NOT EXISTS photoalbumappusr;
+
+grant alter, alter routine, create, create routine, create temporary tables, create view, delete, drop, event, execute, index, insert, lock tables, references, select, show view, trigger, update, grant option on `photo-album-db`.* to photoalbumappusr;
+
+grant alter, alter routine, create, create routine, create temporary tables, create view, delete, drop, event, index, insert, lock tables, select, show databases, show view, trigger, update, grant option on *.* to photoalbumappusr;
+
+
+
 /* Create user table */
 
 CREATE TABLE users (

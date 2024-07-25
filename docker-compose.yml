@@ -4,23 +4,29 @@ services:
     build: frontend
     ports:
       - 3000:${FRONTEND_PORT}
+    depends_on:
+      - backend
   backend:
     build: backend
     ports:
       - 8080:${BACKEND_PORT}
     depends_on:
       - db
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
   db:
-    image: mysql:5.7
+    image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3306:${MYSQL_PORT}"
     volumes:
-      - ./mysql-init:/docker-entrypoint-initdb.d
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql # Ensure init.sql is in the same directory as docker-compose.yml
       - mysql-data:/var/lib/mysql
 
 volumes:
