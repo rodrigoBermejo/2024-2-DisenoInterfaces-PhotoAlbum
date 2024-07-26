@@ -3,19 +3,23 @@ services:
   frontend:
     build: frontend
     ports:
-      - 3000:${FRONTEND_PORT}
+      - "3000:${FRONTEND_PORT}"
     depends_on:
       - backend
+
   backend:
     build: backend
     ports:
-      - 8080:${BACKEND_PORT}
+      - "8080:${BACKEND_PORT}"
     depends_on:
       - db
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: db
+    entrypoint: ["./wait-for-it.sh", "db:3306", "--", "java", "-jar", "/app.jar"]
+
   db:
     image: mysql:latest
     environment:
@@ -26,8 +30,13 @@ services:
     ports:
       - "3306:${MYSQL_PORT}"
     volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql # Ensure init.sql is in the same directory as docker-compose.yml
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mysql-data:

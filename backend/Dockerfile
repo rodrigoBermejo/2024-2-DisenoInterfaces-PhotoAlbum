@@ -1,18 +1,18 @@
-# backend/Dockerfile
-
-# Start with a base image containing Java runtime
-FROM openjdk:22-jdk
-# Add a volume pointing to /tmp
+FROM openjdk:22-jdk-slim
 VOLUME /tmp
-
-# Make port 8080 available to the world outside this container
 EXPOSE 8080
 
-# The application's jar file
 ARG JAR_FILE=target/*.jar
-
-# Add the application's jar to the container
 COPY ${JAR_FILE} app.jar
 
-# Run the jar file
-ENTRYPOINT ["java","-jar","/app.jar"]
+# Install default-mysql-client
+RUN apt-get update && apt-get install -y default-mysql-client
+
+# Add wait-for-it script
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
+RUN addgroup --system spring && adduser --system spring --ingroup spring
+USER spring:spring
+
+ENTRYPOINT ["./wait-for-it.sh", "db", "java", "-jar", "/app.jar"]
